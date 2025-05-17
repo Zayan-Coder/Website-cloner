@@ -1,1 +1,34 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# Termux Website Cloner with Actual Size Display
 
+url=$(termux-dialog text -t "🌐 Website Cloner" -i "Enter full URL to clone:" | jq -r '.text')
+[ -z "$url" ] && termux-toast -b red "❌ No URL entered. Cancelled." && exit
+
+sitename=$(echo "$url" | awk -F[/:] '{print $4}' | sed 's/www.//')
+folder="/storage/emulated/0/Download/$sitename"
+
+# Confirm if exists
+if [ -d "$folder" ]; then
+  termux-dialog confirm -t "Overwrite?" -i "Folder exists. Overwrite $sitename?" > /dev/null
+  [ $? -ne 0 ] && termux-toast -b red "❌ Cancelled." && exit
+  rm -rf "$folder"
+fi
+
+termux-toast -b blue "⏬ Cloning $sitename..."
+start=$(date +%s)
+
+# Clone with HTTrack
+httrack "$url" -O "$folder" "+*.${sitename}/*" -v
+
+# Calculate actual download size
+size=$(du -sh "$folder" | cut -f1)
+end=$(date +%s)
+duration=$((end - start))
+
+# Notify user
+termux-toast -b green "✅ Saved ($size)"
+termux-notification \
+  --title "Cloned: $sitename" \
+  --content "Saved in Downloads/$sitename\nSize: $size\nTime: ${duration}s" \
+  --button1 "Open Index" \
+  --button1-action "am start -a android.intent.action.VIEW -d file://$folder/index.html"
