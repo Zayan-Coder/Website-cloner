@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Website Cloner for Termux</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0066ff, #6600ff);
+      padding: 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header i {
+      font-size: 2rem;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      border-left: 5px solid #00f0ff;
+      padding-left: 10px;
+      color: #00f0ff;
+      display: flex;
+      align-items: center;
+    }
+
+    h2 i {
+      margin-right: 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ff90;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    code {
+      white-space: pre-wrap;
+      word-break: break-word;
+      display: block;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #00f0ff;
+      color: #000;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy-btn i {
+      margin-right: 5px;
+    }
+
+    a {
+      color: #00d9ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><i class="ri-terminal-window-line"></i>Website Cloner for Termux</h1>
+    <p>A powerful tool with download size display and confirmation</p>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2><i class="ri-star-line"></i>Features</h2>
+      <ul>
+        <li><i class="ri-global-line"></i> Clone any public website to your Android device</li>
+        <li><i class="ri-file-search-line"></i> Displays estimated download size</li>
+        <li><i class="ri-folder-download-line"></i> Saves files in <code>~/storage/downloads/</code></li>
+        <li><i class="ri-folder-line"></i> Names folder by domain</li>
+        <li><i class="ri-terminal-box-line"></i> One-word usage: <code>clone</code></li>
+        <li><i class="ri-layout-4-line"></i> Clean UI for Termux</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><i class="ri-install-line"></i>Installation</h2>
+      <h3>Step 1: Install Termux</h3>
+      <p>Download from <a href="https://f-droid.org/packages/com.termux/" target="_blank">F-Droid</a> for best compatibility.</p>
+
+      <h3>Step 2: One-line install command</h3>
+      <pre>
+<code id="installCmd">curl -L -o install.sh https://raw.githubusercontent.com/Zayan-Coder/Website-cloner/main/install.sh && bash install.sh</code>
+<button class="copy-btn" onclick="copyCode()"><i class="ri-file-copy-line"></i>Copy</button>
+      </pre>
+    </section>
+  </div>
+
+  <footer>
+    <i class="ri-github-fill"></i> Made with precision by <a href="https://github.com/Zayan-Coder" target="_blank">Zayan-Coder</a>
+  </footer>
+
+  <script>
+    function copyCode() {
+      const code = document.getElementById("installCmd").innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const toast = document.createElement("div");
+        toast.textContent = "Copied to clipboard!";
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.right = "20px";
+        toast.style.background = "#00f0ff";
+        toast.style.color = "#000";
+        toast.style.padding = "10px 16px";
+        toast.style.borderRadius = "6px";
+        toast.style.boxShadow = "0 0 10px rgba(0,0,0,0.2)";
+        toast.style.fontSize = "0.9rem";
+        toast.style.zIndex = "9999";
+        toast.style.opacity = "0.9";
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.transition = "opacity 0.5s ease";
+          toast.style.opacity = "0";
+          setTimeout(() => toast.remove(), 500);
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
