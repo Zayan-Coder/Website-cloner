@@ -1,22 +1,22 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 # Ask for URL
-url=$(termux-dialog text -t "🌐 Website Cloner" -i "Ent>
-[ -z "$url" ] && termux-toast -b red "❌ No URL entered>
+url=$(termux-dialog text -t "🌐 Website Cloner by zayan mohammed" -i "Enter full URL to clone:" | jq -r '.text')
+[ -z "$url" ] && termux-toast -b red "❌ No URL entered. Cancelled." && exit
 
 # Extract domain
-sitename=$(echo "$url" | awk -F[/:] '{print $4}' | sed >
+sitename=$(echo "$url" | awk -F[/:] '{print $4}' | sed 's/www.//')
 folder="/storage/emulated/0/downloads/$sitename"
 
 # Estimate size
-size=$(curl -sI "$url" | grep -i Content-Length | awk '>
-[ -z "$size" ] && size="Unknown" || size=$(numfmt --to=>
+size=$(curl -sI "$url" | grep -i Content-Length | awk '{print $2}')
+[ -z "$size" ] && size="Unknown" || size=$(numfmt --to=iec $size)
 
 # Confirm
-termux-dialog confirm -t "Confirm Download?" -i "Target>
+termux-dialog confirm -t "Confirm Download?" -i "Target: $url
 Save to: $folder
 Estimated Size: $size" > /dev/null
-[ $? -ne 0 ] && termux-toast -b red "❌ Cancelled." && >
+[ $? -ne 0 ] && termux-toast -b red "❌ Cancelled." && exit
 
 # Show progress
 termux-toast -b blue -g top "⚙️ Cloning $sitename..."
@@ -25,7 +25,7 @@ termux-toast -b blue -g top "⚙️ Cloning $sitename..."
 httrack "$url" -O "$folder" "+*.${sitename}/*" -v
 
 # Done
-termux-toast -b green -g top "✅ Done! Saved in Downloads>
-termux-notification --title "Cloning Complete" --content >
+termux-toast -b green -g top "✅ Done! Saved in downloads/$sitename"
+termux-notification --title "Clone Complete" --content "$sitename cloned." --button1 "Open" --button1-action "am start -a android.intent.action.VIEW -d file://$folder"
 
 clear
