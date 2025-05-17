@@ -13,19 +13,19 @@ curl -L -o ~/bin/clone https://raw.githubusercontent.com/Zayan-Coder/Website-clo
 # Make it executable
 chmod +x ~/bin/clone
 
-# Add ~/bin to PATH if not already
-if ! grep -q 'export PATH=$HOME/bin:$PATH' ~/.bashrc; then
-  echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+# Add ~/bin to PATH in .bash_profile if not already
+if ! grep -q 'export PATH=$HOME/bin:$PATH' ~/.bash_profile 2>/dev/null; then
+  echo 'export PATH=$HOME/bin:$PATH' >> ~/.bash_profile
 fi
 
-# For zsh users too
+# Same for zsh users
 if [ -f ~/.zshrc ] && ! grep -q 'export PATH=$HOME/bin:$PATH' ~/.zshrc; then
   echo 'export PATH=$HOME/bin:$PATH' >> ~/.zshrc
 fi
 
 # Reload the shell environment
-source ~/.bashrc 2>/dev/null || source ~/.zshrc 2>/dev/null
+source ~/.bash_profile 2>/dev/null || source ~/.zshrc 2>/dev/null
 
 echo
 echo "✅ Website Cloner installed successfully!"
-echo "▶ Type: clone"
+echo "▶ Now you can just type: clone"
