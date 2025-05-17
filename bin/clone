@@ -1,34 +1,31 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# Termux Website Cloner with Actual Size Display
 
-url=$(termux-dialog text -t "🌐 Website Cloner" -i "Enter full URL to clone:" | jq -r '.text')
-[ -z "$url" ] && termux-toast -b red "❌ No URL entered. Cancelled." && exit
+# Ask for URL
+url=$(termux-dialog text -t "🌐 Website Cloner" -i "Ent>
+[ -z "$url" ] && termux-toast -b red "❌ No URL entered>
 
-sitename=$(echo "$url" | awk -F[/:] '{print $4}' | sed 's/www.//')
-folder="/storage/emulated/0/Download/$sitename"
+# Extract domain
+sitename=$(echo "$url" | awk -F[/:] '{print $4}' | sed >
+folder="/storage/emulated/0/downloads/$sitename"
 
-# Confirm if exists
-if [ -d "$folder" ]; then
-  termux-dialog confirm -t "Overwrite?" -i "Folder exists. Overwrite $sitename?" > /dev/null
-  [ $? -ne 0 ] && termux-toast -b red "❌ Cancelled." && exit
-  rm -rf "$folder"
-fi
+# Estimate size
+size=$(curl -sI "$url" | grep -i Content-Length | awk '>
+[ -z "$size" ] && size="Unknown" || size=$(numfmt --to=>
 
-termux-toast -b blue "⏬ Cloning $sitename..."
-start=$(date +%s)
+# Confirm
+termux-dialog confirm -t "Confirm Download?" -i "Target>
+Save to: $folder
+Estimated Size: $size" > /dev/null
+[ $? -ne 0 ] && termux-toast -b red "❌ Cancelled." && >
 
-# Clone with HTTrack
+# Show progress
+termux-toast -b blue -g top "⚙️ Cloning $sitename..."
+
+# Clone
 httrack "$url" -O "$folder" "+*.${sitename}/*" -v
 
-# Calculate actual download size
-size=$(du -sh "$folder" | cut -f1)
-end=$(date +%s)
-duration=$((end - start))
+# Done
+termux-toast -b green -g top "✅ Done! Saved in Downloads>
+termux-notification --title "Cloning Complete" --content >
 
-# Notify user
-termux-toast -b green "✅ Saved ($size)"
-termux-notification \
-  --title "Cloned: $sitename" \
-  --content "Saved in Downloads/$sitename\nSize: $size\nTime: ${duration}s" \
-  --button1 "Open Index" \
-  --button1-action "am start -a android.intent.action.VIEW -d file://$folder/index.html"
+clear
